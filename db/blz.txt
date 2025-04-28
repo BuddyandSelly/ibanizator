@@ -14904,3 +14904,4 @@
 870962142Volksbank Chemnitz                                        09474Crottendorf                        Volksbank Chemnitz         98040           06056351U000000000
 870962142Volksbank Chemnitz                                        09423Gelenau                            Volksbank Chemnitz         98040           06056352U000000000
 100101781Revolut Bank, Zweigniederlassung Deutschland              10117Berlin                             Revolut Bank, Berlin            REVODEB2XXX09057801U000000000
+100123451Trade Republic Bank                                       10119Berlin                             Trade Republic Bank, Berlin     TRBKDEBBXXX09057880U000000000
