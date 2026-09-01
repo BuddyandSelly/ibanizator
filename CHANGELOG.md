@@ -1,5 +1,38 @@
 # Changelog
 
+## Unreleased
+
+- **Fixed:**
+  - The bank database was re-saved as UTF-8 in April 2025, which replaced all 8022
+    non-ASCII characters with U+FFFD. Because the records are fixed width, the three
+    extra bytes of every replacement shifted the fields behind it: 1114 of the 4893
+    banks with a BIC returned the wrong BIC and a mangled name, and looking them up
+    by BIC raised BankNotFoundError. The file is restored to ISO-8859-1 - byte for
+    byte the same data, with the Revolut record the same commit added - and the
+    three specs that had been failing since then pass again.
+  - `BankDb` read the database with `File.open` without a block, leaking the file
+    descriptor until the object was collected.
+
+- **Changed:**
+  - The gem is developed and tested with Ruby 4.0.6, `required_ruby_version` is `>= 3.2`.
+  - Updated the dependencies: `equalizer ~> 0.0.11` stays (1.0.0 cannot be combined with adamantium, see the
+    README), `adamantium >= 0.2`, and the development dependencies are current
+    (bundler 2.4+, rake 13, rspec 3.13) plus rubocop and simplecov.
+  - `Ibanizator#calculate_iban` pads the account number with a single `rjust` instead of
+    a loop that could only ever run once.
+
+- **Added:**
+  - SimpleCov measures the suite and fails it when line or branch coverage of `lib/`
+    drops below 100%. CI comments both percentages on every pull request and runs
+    RuboCop.
+  - Dependabot keeps the gems and the actions of the workflows up to date.
+
+- **Removed:**
+  - `lib/errors/bank_not_found_error.rb` and `lib/errors/invalid_bank_code_error.rb`.
+    Nothing required them, they duplicated `Ibanizator::BankDb::BankNotFoundError`, and
+    both subclassed `Exception` rather than `StandardError`, so a plain `rescue` would
+    not have caught them anyway.
+
 ## 0.4.15
 
 - **Features:**

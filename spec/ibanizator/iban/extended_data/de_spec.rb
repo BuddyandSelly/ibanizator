@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Ibanizator::Iban::ExtendedData::DE do
-  let(:iban) { Ibanizator::Iban.new("DE68210501700012345678") }
+  let(:iban) { Ibanizator::Iban.new('DE68210501700012345678') }
   let(:extended_data) { Ibanizator::Iban::ExtendedData::DE.new(iban) }
 
   describe('#initialize') do
@@ -46,7 +48,7 @@ describe Ibanizator::Iban::ExtendedData::DE do
         bank_code: '21050170',
         account_number: '12345678',
         bic: 'NOLADE21KIE',
-        bank_name: 'Förde Sparkasse',
+        bank_name: 'Förde Sparkasse'
       }
       expect(extended_data.to_hash).to eq(data)
       expect(extended_data.to_hash).to eq(extended_data.to_h)
