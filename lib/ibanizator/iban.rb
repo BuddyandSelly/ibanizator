@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'equalizer'
 require 'adamantium'
 
@@ -8,7 +10,7 @@ require_relative 'iban/validator'
 class Ibanizator
   class Iban
     attr_reader :iban_string
-    alias_method :to_s, :iban_string
+    alias to_s iban_string
 
     include Equalizer.new(:iban_string)
     include Adamantium
@@ -28,9 +30,9 @@ class Ibanizator
     memoize :country_code
 
     def extended_data
-      if country_code == :DE
-        ExtendedData::DE.new(self)
-      end
+      return unless country_code == :DE
+
+      ExtendedData::DE.new(self)
     end
     memoize :extended_data
 
@@ -43,8 +45,9 @@ class Ibanizator
     end
 
     private
+
     def sanitize(input)
-      input.to_s.gsub(/\s+/,'').upcase
+      input.to_s.gsub(/\s+/, '').upcase
     end
   end
 end

@@ -1,4 +1,4 @@
-# ibanizator [![Tests](https://github.com/softwareinmotion/ibanizator/actions/workflows/ruby.yml/badge.svg)](https://github.com/softwareinmotion/ibanizator/actions/workflows/ruby.yml)
+# ibanizator [![CI](https://github.com/BuddyandSelly/ibanizator/actions/workflows/ci.yml/badge.svg)](https://github.com/BuddyandSelly/ibanizator/actions/workflows/ci.yml)
 
 ibanizator calculates the iban for german accounts. The database that is used to convert a bank number to a
 BIC is taken from [Deutsche Bundesbank](https://www.bundesbank.de/en/tasks/payment-systems/services/bank-sort-codes/download-bank-sort-codes-626218).
@@ -84,3 +84,37 @@ bank_4 == bank_2  # => false
 ## Licence
 
 The code is availiable under the MIT-Licence
+
+## Development
+
+The gem is developed and tested against the Ruby version in
+[.ruby-version](.ruby-version) and supports Ruby >= 3.2.
+
+```bash
+bundle install
+bundle exec rspec    # specs, including the coverage check
+bundle exec rubocop  # style
+bundle exec rake     # both of the above
+```
+
+The specs are measured with [SimpleCov](https://github.com/simplecov-ruby/simplecov): line and
+branch coverage of everything in `lib/` have to stay at 100%, and the suite fails otherwise. The
+HTML report is written to `coverage/index.html`, and CI comments both percentages on every pull
+request.
+
+### The bank database
+
+`db/blz.txt` is the Bundesbank sort code file, kept **as published: fixed width records in
+ISO-8859-1**. Do not open it in an editor that saves UTF-8. Re-encoding it turns every umlaut into
+one replacement character of three bytes, which shifts every field behind it and silently gives the
+wrong BIC for a fifth of the banks in the file. `BankDb` reads it in binary and transcodes only the
+name.
+
+### equalizer
+
+The gem is pinned to `equalizer ~> 0.0.11`, because 1.0.0 cannot be combined with Adamantium.
+1.0.0 names the module it builds after its attributes, `Equalizer(iban_string)`. Adamantium freezes
+through ice_nine, whose freezer lookup walks the names of the ancestor modules and passes each one to
+`Module#const_defined?` - which rejects a name with brackets in it. So every
+`Ibanizator::Iban.new` raises `NameError: wrong constant name Equalizer(iban_string)`.
+

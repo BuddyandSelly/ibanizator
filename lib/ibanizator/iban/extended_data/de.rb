@@ -1,13 +1,17 @@
+# frozen_string_literal: true
+
 class Ibanizator
   class Iban
     module ExtendedData
       class DE
         attr_reader :iban
+
         include Equalizer.new(:iban)
         include Adamantium
 
         def initialize(iban)
           raise Invalid, "can't compute extended data on invalid iban" unless iban.valid?
+
           @iban = iban
         end
 
@@ -17,7 +21,7 @@ class Ibanizator
         memoize :bank_code
 
         def account_number
-          iban.to_s[12..-1].gsub(/\A0+/,"")
+          iban.to_s[12..].gsub(/\A0+/, '')
         end
         memoize :account_number
 
@@ -34,10 +38,10 @@ class Ibanizator
             bank_code: bank_code,
             account_number: account_number,
             bic: bic,
-            bank_name: bank_name,
+            bank_name: bank_name
           }
         end
-        alias_method :to_h, :to_hash
+        alias to_h to_hash
 
         private
 
@@ -46,6 +50,6 @@ class Ibanizator
         end
         memoize :bank
       end
-    end # ExtendedData
-  end # Iban
-end # Ibanizator
+    end
+  end
+end

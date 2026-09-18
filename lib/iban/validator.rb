@@ -1,14 +1,17 @@
+# frozen_string_literal: true
+
 module Iban
   class Validator
     # public because it's used in `Ibanizator.calculate_iban`
     def sanitize_input(input)
-      input.to_s.chomp.gsub(/\s+/,"")
+      input.to_s.chomp.gsub(/\s+/, '')
     end
 
     private
 
     def valid_length?(iban)
       return false if iban.length <= 4 # two digits for the country code and two for the checksum
+
       country_code = iban[0..1].upcase.to_sym
       iban.length == Ibanizator::Iban::LENGTHS[country_code]
     end
@@ -19,7 +22,7 @@ module Iban
     end
 
     def reorder(iban)
-      "#{iban[4..-1]}#{iban[0..3]}"
+      "#{iban[4..]}#{iban[0..3]}"
     end
 
     def integerize(iban)

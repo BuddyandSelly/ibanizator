@@ -1,2 +1,0 @@
-class BankNotFoundError < Exception
-end

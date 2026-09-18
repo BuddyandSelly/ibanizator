@@ -3,7 +3,6 @@
 Gem::Specification.new do |s|
   s.name = 'ibanizator'
   s.version = '0.4.15'
-  s.date = '2022-12-21'
   s.licenses = ['MIT']
 
   s.summary = <<-SUMMARY
@@ -22,12 +21,16 @@ Gem::Specification.new do |s|
 
   s.files = Dir.glob('lib/**/*') + %w[license.md README.md db/blz.txt]
 
-  s.required_ruby_version = '>= 2.5.0'
+  s.required_ruby_version = '>= 3.2'
 
-  s.add_dependency 'adamantium', '~> 0.2.0'
+  s.add_dependency 'adamantium', '>= 0.2'
+  # equalizer 1.0.0 does not work with adamantium, see the README
   s.add_dependency 'equalizer', '~> 0.0.11'
 
-  s.add_development_dependency 'bundler', '~> 2.1'
-  s.add_development_dependency 'rake', '~> 12.3'
-  s.add_development_dependency 'rspec', '~> 3.9'
+  s.add_development_dependency 'bundler', '>= 2.4'
+  s.add_development_dependency 'rake', '~> 13.0'
+  s.add_development_dependency 'rspec', '~> 3.13'
+  s.add_development_dependency 'rubocop', '~> 1.90'
+  s.add_development_dependency 'simplecov', '~> 1.1'
+  s.metadata['rubygems_mfa_required'] = 'true'
 end

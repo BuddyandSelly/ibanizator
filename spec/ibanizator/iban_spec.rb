@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Ibanizator::Iban do
-  let(:an_iban_string) { "de68 2105 0170 0012 3456 78" }
-  let(:sanitized_iban_string) { "DE68210501700012345678" }
+  let(:an_iban_string) { 'de68 2105 0170 0012 3456 78' }
+  let(:sanitized_iban_string) { 'DE68210501700012345678' }
   let(:iban) { Ibanizator::Iban.new(an_iban_string) }
 
   describe '#initialze' do
@@ -17,7 +19,7 @@ describe Ibanizator::Iban do
     end
 
     it 'returns :unkown_country if the ibanizator does not recognize the country code' do
-      expect(Ibanizator::Iban.new("XX1234678901234567").country_code).to eq(:unknown)
+      expect(Ibanizator::Iban.new('XX1234678901234567').country_code).to eq(:unknown)
     end
   end
 
@@ -31,6 +33,12 @@ describe Ibanizator::Iban do
         expect(Ibanizator::Iban::ExtendedData::DE).to receive(:new).with(iban)
 
         iban.extended_data
+      end
+    end
+
+    context 'given an iban of another country' do
+      it 'returns nil, because only germany has an implementation' do
+        expect(Ibanizator::Iban.new('GB82 WEST 1234 5698 7654 32').extended_data).to be_nil
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Ibanizator
   class BankDb
     class BankNotFoundError < StandardError; end
@@ -28,7 +30,9 @@ class Ibanizator
     def populate_known_banks!
       file = File.expand_path('../../db/blz.txt', __dir__)
 
-      File.open(file, 'r').each_line do |line|
+      # The Bundesbank publishes the file as fixed width ISO-8859-1 records, so the
+      # fields are cut out of the bytes and the name is transcoded below.
+      File.foreach(file, mode: 'rb') do |line|
         code, _, _, _, _, name, _, bic = line.unpack 'A8A1A58A5A35A27A5A11'
         next if bic.empty?
 
@@ -51,11 +55,10 @@ class Ibanizator
       @known_banks << bank
 
       @bic_index[bank.bic] = bank
-      if optional_branch_code?(bank.bic)
-        @bic_index[bank.bic.gsub(/XXX$/, '')] = bank
-      end
+      @bic_index[bank.bic.gsub(/XXX$/, '')] = bank if optional_branch_code?(bank.bic)
 
       return if bank_exists_and_not_favored?(bank.bank_code, bank.bic)
+
       @bank_code_index[bank.bank_code] = bank
     end
 

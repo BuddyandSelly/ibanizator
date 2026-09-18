@@ -1,0 +1,36 @@
+# RuboCop replaces its default AllCops/Exclude with the one below instead of
+# adding to it, and CI installs the bundle into vendor/bundle, where a gem with
+# a .rubocop.yml of its own would be picked up.
+inherit_mode:
+  merge:
+    - Exclude
+
+AllCops:
+  TargetRubyVersion: 3.2
+  NewCops: enable
+  SuggestExtensions: false
+
+# Development dependencies are declared in the gemspec, next to the runtime ones.
+Gemspec/DevelopmentDependencies:
+  EnforcedStyle: gemspec
+
+Layout/LineLength:
+  Max: 120
+
+# calculate_iban assembles the iban out of half a dozen option values.
+Metrics/AbcSize:
+  Max: 30
+
+# Ibanizator::Iban::Validator#validate is the published name of the method, and
+# Ibanizator::Iban#valid? is what callers are meant to use.
+Naming/PredicateMethod:
+  Exclude:
+    - 'lib/ibanizator/iban/validator.rb'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+    - '*.gemspec'
+
+Style/Documentation:
+  Enabled: false

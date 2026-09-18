@@ -21,4 +21,4 @@ tmp
 *.a
 mkmf.log
 bin/
-.ruby-version
+.rspec_status
